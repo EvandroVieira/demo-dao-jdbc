@@ -1,13 +1,18 @@
 package aplicacao;
 
-import db.DB;
-import modelo.entidade.Departamento;
+import modelo.entidade.Departament;
+import modelo.entidade.Seller;
 
-import java.sql.Connection;
+import java.util.Date;
 
 public class Principal {
     public static void main(String[] args) {
-        Departamento obj = new Departamento(1, "Books");
-        System.out.println(obj);
+        Departament obj = new Departament(1, "Books");
+
+        Seller seller = new Seller(21, "Bob", "bob@gmail.com", new Date(), 3000.0, obj);
+
+        System.out.println(seller);
+
+
     }
 }
