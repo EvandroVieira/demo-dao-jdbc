@@ -4,7 +4,7 @@ import modelo.entidade.Departament;
 
 import java.util.List;
 
-public interface DepartamentDao {
+public interface DepartmentDao {
     void insert(Departament obj);
     void update(Departament obj);
     void deleteById(Integer id);
