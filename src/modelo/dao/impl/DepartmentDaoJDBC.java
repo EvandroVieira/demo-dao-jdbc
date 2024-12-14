@@ -6,6 +6,7 @@ import modelo.dao.DepartmentDao;
 import modelo.entidade.Department;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentDaoJDBC implements DepartmentDao {
@@ -72,7 +73,21 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public void deleteById(Integer id) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement(
+                    "DELETE FROM department "
+                            + "WHERE Id = ?");
+            st.setInt(1, id);
 
+            st.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DbExcecao(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
@@ -105,6 +120,30 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public List<Department> findAll() {
-        return List.of();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT * FROM department");
+            rs = st.executeQuery();
+
+            List<Department> departments = new ArrayList<>();
+
+            while (rs.next()) {
+                Department dep = new Department();
+                dep.setId(rs.getInt("Id"));
+                dep.setName(rs.getString("Name"));
+
+                departments.add(dep);
+            }
+            return departments;
+        }
+        catch (SQLException e) {
+            throw new DbExcecao(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
     }
 }
