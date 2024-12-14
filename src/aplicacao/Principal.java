@@ -33,5 +33,14 @@ public class Principal {
         Seller newseller = new Seller(null, "Greg", "greg@gmail.com", new Date(), 4000.0, departament);
         sellerDao.insert(newseller);
         System.out.println("Inserido! Novo Id = " + newseller.getId());
+
+        System.out.println("\n=== Test #5: seller update");
+        seller = sellerDao.findById(1);
+        System.out.println("Nome antes do Update = " + seller.getName());
+        seller.setName("Marta Waine");
+        sellerDao.update(seller);
+        System.out.println("Update completo!");
+        seller = sellerDao.findById(1);
+        System.out.println("Nome após o Update = " + seller.getName());
     }
 }
