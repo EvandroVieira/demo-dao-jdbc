@@ -3,7 +3,7 @@ package modelo.dao.impl;
 import db.DB;
 import db.DbExcecao;
 import modelo.dao.DepartmentDao;
-import modelo.entidade.Departament;
+import modelo.entidade.Department;
 
 import java.sql.*;
 import java.util.List;
@@ -17,7 +17,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     }
 
     @Override
-    public void insert(Departament obj) {
+    public void insert(Department obj) {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
@@ -50,8 +50,24 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     }
 
     @Override
-    public void update(Departament obj) {
+    public void update(Department obj) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement(
+                    "UPDATE department "
+                        + "SET Name = ? "
+                        + "WHERE Id = ?");
+            st.setString(1, obj.getName());
+            st.setInt(2, obj.getId());
 
+            st.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DbExcecao(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
@@ -60,12 +76,35 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     }
 
     @Override
-    public Departament findById(Integer id) {
-        return null;
+    public Department findById(Integer id) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT * FROM department "
+                        + "WHERE Id = ?");
+            st.setInt(1, id);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                Department dep = new Department();
+                dep.setId(rs.getInt("Id"));
+                dep.setName(rs.getString("Name"));
+                return dep;
+            }
+            return null;
+        }
+        catch (SQLException e) {
+            throw new DbExcecao(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
     }
 
     @Override
-    public List<Departament> findAll() {
+    public List<Department> findAll() {
         return List.of();
     }
 }
