@@ -5,6 +5,7 @@ import modelo.dao.SellerDao;
 import modelo.entidade.Departament;
 import modelo.entidade.Seller;
 
+import java.util.Date;
 import java.util.List;
 
 public class Principal {
@@ -27,5 +28,10 @@ public class Principal {
         for (Seller obj : list) {
             System.out.println(obj);
         }
+
+        System.out.println("\n=== Test #4: seller insert");
+        Seller newseller = new Seller(null, "Greg", "greg@gmail.com", new Date(), 4000.0, departament);
+        sellerDao.insert(newseller);
+        System.out.println("Inserido! Novo Id = " + newseller.getId());
     }
 }
